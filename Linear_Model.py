@@ -22,6 +22,20 @@ if 'units_note' in data:
     print(data['units_note'])
 
 # Linear Model and fitting
+m = 1760+150 #kg
+g = 9.81
+theta = np.radians(1.03) #degrees
+
+f_south = m*g*np.sin(theta)
+f_north = -f_south  # going up against gravity
+
+def ode(t, v, b, f_grav):
+    return (f_grav - b*v) / m
+
+def solver(b, t_data, v0, f_grav):
+    sol = solve_ivp(
+        
+    )
 
 # Comparison Plots
 plt.figure(1)
