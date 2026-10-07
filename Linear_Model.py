@@ -62,6 +62,7 @@ minimum = minimize(error, x0=[20.0], bounds = [(0, None)])
 b_out = minimum.x[0]
 print(b_out)
 
+# Now we actually grab those output curves for the optimized b value
 sol_south_fit = solve_ivp(
     fun = ode,
     t_span = (t1[0], t1[-1]),
