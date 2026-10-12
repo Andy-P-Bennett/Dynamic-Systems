@@ -38,7 +38,7 @@ f_north = -f_south  # going up against gravity
 v_wind = 3.12928 # 7 mph -> m/s, from the North
 
 def ode(t, v, mu_k, c_d, f_grav, v_wind): #linear
-    return (f_grav - mu_k*g*np.cos(theta) - (c_d*A_p*rho_f*(v+v_wind)**2)/(2*m))
+    return (f_grav - mu_k*g*np.cos(theta) - (c_d*A_p*rho_f*(v+np.sign(v_wind))**2)/(2*m))
 
 def error(guesses):
     mu_k = guesses[0]
@@ -49,7 +49,7 @@ def error(guesses):
         y0 = [v1[0]],
         t_eval = t1,
         args = (mu_k, c_d, f_south, -v_wind) #going with the wind, so drag velocity decreased, '-'
-    )    
+    )
     sol_north = solve_ivp(
         fun = ode,
         t_span = (t2[0], t2[-1]),
