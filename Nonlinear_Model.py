@@ -103,4 +103,15 @@ plt.ylabel('Speed (m/s)')
 plt.legend()
 plt.title('Speed vs. Time, Data and Nonlinear Model')
 
+# Uncertainly analysis - contour plot of error function for Mu_K and C_d
+plt.figure(2)
+mus = np.linspace(0, 0.015, 50)
+cds = np.linspace(0.3, 0.8, 50)
+E = np.array([[error([mu, cd]) for mu in mus] for cd in cds])
+
+plt.contourf(mus, cds, E, 30)
+plt.colorbar(label='Sum of squared error')
+plt.contour(mus, cds, E, levels=[1.10*minimum.fun, 1.5*minimum.fun], colors=['r', 'w'])  # "acceptable" = within 10% of best
+plt.plot(MuK_out, Cd_out, 'k*')
+plt.xlabel('mu_k'); plt.ylabel('Cd')
 plt.show()
