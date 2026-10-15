@@ -1,0 +1,27 @@
+"""Power needed to hold a constant speed on level ground (from fitted Cd and mu_k)."""
+
+# Fitted parameters
+mu_k = 9.413e-5
+Cd   = 0.602
+
+# Constants from the lab handout
+m      = 1760 + 150      # kg
+g      = 9.81            # m/s^2
+Ap     = 2.15            # m^2
+rho    = 1.06            # kg/m^3
+v_wind = 7 * 0.44704     # 7 mph -> m/s, wind from the North
+
+
+def power_hp(speed_mph, direction):
+    """Horsepower to hold speed_mph. direction is 'south' (with wind) or 'north' (into wind)."""
+    v = speed_mph * 0.44704                      # mph -> m/s
+    v_rel = v - v_wind if direction == "south" else v + v_wind
+
+    F_friction = mu_k * m * g                    # N (level ground, so N = m*g)
+    F_drag = 0.5 * Cd * Ap * rho * v_rel**2      # N
+    P_watts = (F_friction + F_drag) * v          # P = F*v
+    return P_watts / 745.7                       # W -> hp
+
+
+for mph in (55, 100):
+    print(f"{mph} mph: {power_hp(mph, 'south'):.2f} hp south, {power_hp(mph, 'north'):.2f} hp north")

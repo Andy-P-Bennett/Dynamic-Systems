@@ -6,6 +6,7 @@ import scipy.io
 from scipy.integrate import solve_ivp
 from scipy.optimize import minimize
 import numpy as np
+import matplotlib.lines as mlines
 import matplotlib.pyplot as plt
 
 # Load the .mat file
@@ -31,7 +32,7 @@ m = 1760+150 #kg
 g = 9.81
 rho_f = 1.06
 A_p = 2.15
-theta = np.radians(1.03) #degrees
+theta = np.radians(1.13) #degrees
 
 f_south = g*np.sin(theta)
 f_north = -f_south  # going up against gravity
@@ -105,13 +106,17 @@ plt.title('Speed vs. Time, Data and Nonlinear Model')
 
 # Uncertainly analysis - contour plot of error function for Mu_K and C_d
 plt.figure(2)
-mus = np.linspace(0, 0.015, 50)
-cds = np.linspace(0.3, 0.8, 50)
+mus = np.linspace(0, 0.012, 50)
+cds = np.linspace(0.4, 0.7, 50)
 E = np.array([[error([mu, cd]) for mu in mus] for cd in cds])
 
 plt.contourf(mus, cds, E, 30)
 plt.colorbar(label='Sum of squared error')
-plt.contour(mus, cds, E, levels=[1.10*minimum.fun, 1.5*minimum.fun], colors=['r', 'w'])  # "acceptable" = within 10% of best
-plt.plot(MuK_out, Cd_out, 'k*')
-plt.xlabel('mu_k'); plt.ylabel('Cd')
+Con = plt.contour(mus, cds, E, levels=[1.10*minimum.fun, 1.5*minimum.fun], colors=['r', 'w'])  # "acceptable" = within 10% of best
+red = mlines.Line2D([],[],color='r',label='10% above min')
+white = mlines.Line2D([],[],color='w',label='50% above min')
+plt.plot(MuK_out, Cd_out, 'w*')
+plt.xlabel(r'$\mu_k$'); plt.ylabel(r'$C_d$')
+plt.title(f'Error Contour Map - Best Error: {minimum.fun:.4f}')
+plt.legend(handles=[red,white])
 plt.show()
